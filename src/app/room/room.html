@@ -1,0 +1,36 @@
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{room.name}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            Capacity: {{room.capacity}}
+        </h6>
+        <p>
+            Features:
+            <span *ngFor="let feature of room.features; let last = last">
+                {{ feature }} <span *ngIf="!last">, </span>
+            </span>
+        </p>
+        
+        <div *ngIf="room.availableSlots.length === 0" class="alert alert-danger">
+            Room fully booked
+        </div>
+
+        <div>
+            <button
+            *ngFor="let slot of room.allSlots"
+            [disabled]="room.bookedSlots?.includes(slot)"
+            class="btn btn-sm me-2 mb-2"
+            [ngClass]="{
+                'btn-success': !room.bookedSlots?.includes(slot),
+                'btn-secondary': room.bookedSlots?.includes(slot)
+            }"
+            [attr.title]="room.bookedSlots?.includes(slot) ? 'Already booked!' : 'Click to book'"
+            (click)="bookSlot(slot)"
+            [style.background-color]="room.bookedSlots?.includes(slot) ? '#D3D3D3' : null"
+            [style.color]="room.bookedSlots?.includes(slot) ? '#172543' : null"
+            >
+            {{ slot }}
+            </button>
+        </div>
+    </div>
+</div>

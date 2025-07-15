@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <h3>{{ isEditMode ? 'Edit Booking' : 'New Booking' }}</h3>
+
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label>Requester Name</label>
+      <input type="text" class="form-control" formControlName="requester">
+    </div>
+
+    <div class="mb-3">
+      <label>Purpose</label>
+      <textarea class="form-control" formControlName="purpose"></textarea>
+    </div>
+
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Select Slot</mat-label>
+      <mat-select formControlName="time" [ngStyle]="{
+        'background-color': '#8BC1EC',
+        'color': '#0078D7'
+      }">
+        <mat-option *ngFor="let slot of availableSlots" [value]="slot">
+          {{ slot }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="bookingForm.invalid">
+      {{ isEditMode ? 'Save Changes' : 'Book Room' }}
+    </button>
+  </form>
+</div>

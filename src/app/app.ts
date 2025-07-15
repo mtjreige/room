@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Rooms } from './rooms/rooms'; 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  standalone: true,
+  imports: [Rooms],
+  templateUrl: './app.html'
 })
-export class App {
-  protected title = 'room';
-}
+export class App {}
