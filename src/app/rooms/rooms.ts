@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RoomService, Room } from '../room-service/room-service';
+import { RoomService, Room } from '../room-service';
 import { RoomComponent } from '../room/room';
 import { CommonModule } from '@angular/common';
 @Component({

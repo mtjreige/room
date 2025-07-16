@@ -9,12 +9,7 @@ export interface Booking {
   purpose: string;
 }
 
-@Component({
-  selector: 'app-booking-service',
-  imports: [],
-  templateUrl: './booking-service.html',
-  styleUrl: './booking-service.css'
-})
+
 
 @Injectable({ providedIn: 'root'})
 export class BookingService {

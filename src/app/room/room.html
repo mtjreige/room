@@ -26,8 +26,6 @@
             }"
             [attr.title]="room.bookedSlots?.includes(slot) ? 'Already booked!' : 'Click to book'"
             (click)="bookSlot(slot)"
-            [style.background-color]="room.bookedSlots?.includes(slot) ? '#D3D3D3' : null"
-            [style.color]="room.bookedSlots?.includes(slot) ? '#172543' : null"
             >
             {{ slot }}
             </button>

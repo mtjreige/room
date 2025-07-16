@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Room as RoomModel } from '../room-service/room-service';
+import { Room as RoomModel } from '../room-service';
 import { CommonModule } from '@angular/common';
 
 @Component({

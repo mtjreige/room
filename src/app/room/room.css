@@ -48,6 +48,10 @@
     cursor: not-allowed;
 }
 
+.booked-slot {
+    background-color: #d3d3d3;
+    color: #172543;
+}
 .alert-danger{
     background-color: #f8d7da;
     color: #842029;
