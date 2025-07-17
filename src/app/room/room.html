@@ -24,7 +24,8 @@
                 'btn-success': !room.bookedSlots?.includes(slot),
                 'btn-secondary': room.bookedSlots?.includes(slot)
             }"
-            [attr.title]="room.bookedSlots?.includes(slot) ? 'Already booked!' : 'Click to book'"
+            [ngbTooltip]="room.bookedSlots?.includes(slot) ? 'Already booked!' : 'Click to book'"
+            ngbTooltipClass="custom-tooltip"
             (click)="bookSlot(slot)"
             >
             {{ slot }}

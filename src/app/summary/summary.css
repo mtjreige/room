@@ -1,0 +1,9 @@
+.pointer {
+  cursor: pointer;
+}
+.expandable {
+  background-color: #f1f1f1;
+}
+.table-sm td, .table-sm th {
+  vertical-align: middle;
+}
