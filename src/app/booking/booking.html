@@ -2,7 +2,7 @@
   <form [formGroup]="bookingForm" (ngSubmit)="onSubmit(confirmModal)">
     <mat-form-field appearance="fill" class="w-100 mb-3">
       <mat-label>Requester Name</mat-label>
-      <input matInput formControlName="requester" placeholder="Enter your name">
+      <input matInput formControlName="requester" placeholder="Enter your name" />
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="w-100 mb-3">
@@ -10,26 +10,37 @@
       <textarea matInput formControlName="purpose" placeholder="Purpose of booking"></textarea>
     </mat-form-field>
 
-    <mat-form-field appearance="fill" class="w-100 mb-3">
+
       <mat-label>Select Slot</mat-label>
-      <mat-select formControlName="slot" [ngStyle]="{'background-color': '#8BC1EC', 'color': '#0078D7'}">
-        <mat-option *ngFor="let slot of availableSlots" [value]="slot">
+      <mat-select
+        formControlName="slot"
+        class="custom-select"
+      >
+        <mat-option
+          *ngFor="let slot of availableSlots"
+          [value]="slot"
+          [disabled]="bookedSlots.includes(slot) && (!isEditMode || bookingForm.value.slot !== slot)"
+        >
           {{ slot }}
         </mat-option>
       </mat-select>
-    </mat-form-field>
+ 
 
-    <button type="submit" class="btn btn-primary">Save Booking</button>
+    <button type="submit" class="btn btn-primary save-button">Save Booking</button>
   </form>
-
 
   <ng-template #confirmModal let-modal>
     <div class="modal-header">
       <h5 class="modal-title">Confirm Booking</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
     </div>
     <div class="modal-body">
-      You are booking <strong>{{ roomName}}</strong> at {{ bookingForm.value.slot }} — confirm?
+      You are booking <strong>{{ roomName }}</strong> at {{ bookingForm.value.slot }} — confirm?
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>

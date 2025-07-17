@@ -1,0 +1,20 @@
+.slot-dropdown {
+  background-color: white;
+  color: #0078D7;
+  border-radius: 4px;
+}
+
+
+::ng-deep .mat-select-panel {
+  background-color: #f0f8ff; 
+  color: #0078D7;
+}
+
+
+::ng-deep .mat-option:hover {
+  background-color: #dbeeff;
+}
+
+.save-button {
+    margin-top: 12rem;
+}

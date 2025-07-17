@@ -7,3 +7,15 @@
 .table-sm td, .table-sm th {
   vertical-align: middle;
 }
+.pointer {
+  cursor: pointer;
+}
+
+.expanded-row td {
+  padding: 0;
+  border: none;
+}
+
+.hidden {
+  display: none;
+}

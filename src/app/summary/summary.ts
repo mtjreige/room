@@ -20,7 +20,7 @@ interface RoomWithExpanded extends Room {
   styleUrls: ['./summary.css']
 })
 export class SummaryComponent implements OnInit {
-  displayedColumns = ['name', 'capacity', 'count', 'status'];
+  displayedColumns = ['expand', 'name', 'capacity', 'count', 'status'];
   rooms: RoomWithExpanded[] = [];
   bookingsByRoom: { [roomId: number]: Booking[] } = {};
 
@@ -44,6 +44,10 @@ export class SummaryComponent implements OnInit {
 
   hasNoBookings(): boolean {
     return this.rooms.every(room => !this.hasBookings(room.id));
+  }
+
+  toggleExpand(room: RoomWithExpanded): void {
+    room.expanded = !room.expanded;
   }
 
   cancelBooking(bookingId: number, modalContent: any): void {

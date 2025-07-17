@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService, Booking } from '../booking-service';
-import { RoomService } from '../room-service';
+import { RoomService, Room } from '../room-service';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,16 +16,17 @@ import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './booking.html',
   styleUrls: ['./booking.css'],
   imports: [
-    CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, NgbModalModule ]
+    CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, NgbModalModule
+  ]
 })
 export class BookingComponent implements OnInit {
   bookingForm!: FormGroup;
   roomId!: number;
   roomName = '';
   bookingId?: number;
-  selectedSlot?: string;
   isEditMode = false;
-  availableSlots: string[] = [];
+  availableSlots: string[] = [];  // All possible slots (to show all in dropdown)
+  bookedSlots: string[] = [];     // Slots already booked (to disable in dropdown)
 
   constructor(
     private fb: FormBuilder,
@@ -41,19 +42,20 @@ export class BookingComponent implements OnInit {
     this.bookingId = this.route.snapshot.paramMap.get('bookingId')
       ? +this.route.snapshot.paramMap.get('bookingId')!
       : undefined;
-    this.selectedSlot = this.route.snapshot.paramMap.get('slot') || undefined;
     this.isEditMode = !!this.bookingId;
 
     const rooms = this.roomService.getRooms();
     const room = rooms.find(r => r.id === this.roomId);
     if (!room) return;
+
     this.roomName = room.name;
-    this.availableSlots = room.availableSlots;
+    this.availableSlots = room.allSlots || room.availableSlots;  // get all slots
+    this.bookedSlots = room.bookedSlots || [];
 
     if (this.isEditMode) {
       const booking = this.bookingService.getBooking(this.bookingId!);
       if (booking) {
-        
+        // Add the booked slot of this booking back if missing so user can keep it selected
         if (!this.availableSlots.includes(booking.time)) {
           this.availableSlots.push(booking.time);
         }
@@ -68,7 +70,7 @@ export class BookingComponent implements OnInit {
       this.bookingForm = this.fb.group({
         requester: ['', Validators.required],
         purpose: ['', Validators.required],
-        slot: [this.selectedSlot || '', Validators.required]
+        slot: ['', Validators.required]
       });
     }
   }
@@ -85,11 +87,10 @@ export class BookingComponent implements OnInit {
       this.bookingService.updateBooking(updatedBooking);
       this.router.navigate(['/summary']);
     } else {
-      
       this.modalService.open(modalContent).result.then(result => {
         if (result === 'confirm') {
           this.bookingService.addBooking({
-            id: 0, 
+            id: 0,
             roomId: this.roomId,
             ...this.bookingForm.value
           });
