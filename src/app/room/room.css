@@ -61,3 +61,12 @@
     font-weight: 600;
     text-align: center;
 }
+
+.custom-tooltip {
+    background-color: #8BC1EC !important;
+    color: #0078D7 !important;
+    padding: 0.4rem 0.75 rem;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    box-shadow: 0 0 6px rgba(0, 120, 215, 0.5);
+}

@@ -1,92 +1,103 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { RoomService, Room } from '../room-service';
-import { BookingService, Booking } from '../booking-service';
+import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { Booking, BookingService } from '../booking-service';
+import { Room, RoomService } from '../room-service';
+
 
 @Component({
   selector: 'app-booking',
-  standalone: true, 
+  standalone: true,
   templateUrl: './booking.html',
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule],
+  styleUrls: ['./booking.css'],
+  imports: [
+    CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, NgbModalModule
+  ]
 })
 export class BookingComponent implements OnInit {
   bookingForm!: FormGroup;
-  room!: Room;
-  allSlots: string[] = [];
-  availableSlots: string[] = [];
+  roomId!: number;
+  roomName = '';
+  bookingId?: number;
   isEditMode = false;
-  currentBookingId?: number;
+  availableSlots: string[] = [];  
+  bookedSlots: string[] = [];     
 
   constructor(
-    private route: ActivatedRoute,
     private fb: FormBuilder,
-    private roomService: RoomService,
+    private route: ActivatedRoute,
+    private router: Router,
     private bookingService: BookingService,
-    private router: Router
+    private roomService: RoomService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
-    const roomId = Number(this.route.snapshot.paramMap.get('roomId'));
-    const slotFromUrl = this.route.snapshot.paramMap.get('slot');
-    this.currentBookingId = Number(this.route.snapshot.paramMap.get('bookingId'));
-    this.isEditMode = !isNaN(this.currentBookingId);
+    this.roomId = +this.route.snapshot.paramMap.get('roomId')!;
+    this.bookingId = this.route.snapshot.paramMap.get('bookingId')
+      ? +this.route.snapshot.paramMap.get('bookingId')!
+      : undefined;
+    this.isEditMode = !!this.bookingId;
 
-    const roomData = this.roomService.getRooms().find(room => room.id === roomId);
-    if (!roomData) return;
+    const rooms = this.roomService.getRooms();
+    const room = rooms.find(r => r.id === this.roomId);
+    if (!room) return;
 
-    this.room = roomData;
-    this.allSlots = [...(roomData.allSlots ?? roomData.availableSlots)];
-    this.availableSlots = [...roomData.availableSlots];
+    this.roomName = room.name;
+    this.availableSlots = room.allSlots || room.availableSlots;  
+    this.bookedSlots = room.bookedSlots || [];
 
     if (this.isEditMode) {
-      const booking = this.bookingService.getBooking(this.currentBookingId!);
-      if (!booking) return;
+      const booking = this.bookingService.getBooking(this.bookingId!);
+      if (booking) {
+        
+        if (!this.availableSlots.includes(booking.time)) {
+          this.availableSlots.push(booking.time);
+        }
 
-
-      if (!this.availableSlots.includes(booking.time)) {
-        this.availableSlots.push(booking.time);
+        this.bookingForm = this.fb.group({
+          requester: [booking.requester, Validators.required],
+          purpose: [booking.purpose, Validators.required],
+          time: [booking.time, Validators.required]
+        });
       }
-
-      this.bookingForm = this.fb.group({
-        requester: [booking.requester, Validators.required],
-        purpose: [booking.purpose, Validators.required],
-        time: [booking.time, Validators.required]
-      });
     } else {
       this.bookingForm = this.fb.group({
         requester: ['', Validators.required],
         purpose: ['', Validators.required],
-        time: [slotFromUrl ?? '', Validators.required]
+        time: ['', Validators.required]
       });
-
-      if (slotFromUrl && !this.availableSlots.includes(slotFromUrl)) {
-        this.availableSlots.push(slotFromUrl);
-      }
     }
   }
 
-  onSubmit(): void {
+  onSubmit(modalContent: any): void {
     if (this.bookingForm.invalid) return;
 
-    const booking: Booking = {
-      id: this.currentBookingId ?? Date.now(),
-      roomId: this.room.id,
-      ...this.bookingForm.value
-    };
-
     if (this.isEditMode) {
-      this.bookingService.updateBooking(booking);
+      const updatedBooking: Booking = {
+        id: this.bookingId!,
+        roomId: this.roomId,
+        ...this.bookingForm.value
+      };
+      this.bookingService.updateBooking(updatedBooking);
       this.router.navigate(['/summary']);
     } else {
-      const confirmed = window.confirm(`You are booking ${this.room.name} at ${booking.time} — confirm?`);
-      if (confirmed) {
-        this.bookingService.addBooking(booking);
-        this.router.navigate(['/summary']);
-      }
+      this.modalService.open(modalContent).result.then(result => {
+        if (result === 'confirm') {
+          this.bookingService.addBooking({
+            id: 0,
+            roomId: this.roomId,
+            ...this.bookingForm.value
+          });
+          this.router.navigate(['/summary']);
+        }
+      }).catch(() => {});
     }
   }
 }
