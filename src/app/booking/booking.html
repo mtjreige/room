@@ -13,7 +13,7 @@
 
       <mat-label>Select Slot</mat-label>
       <mat-select
-        formControlName="slot"
+        formControlName="time"
         class="custom-select"
       >
         <mat-option
@@ -40,7 +40,7 @@
       ></button>
     </div>
     <div class="modal-body">
-      You are booking <strong>{{ roomName }}</strong> at {{ bookingForm.value.slot }} — confirm?
+      You are booking <strong>{{ roomName }}</strong> at {{ bookingForm.value.time }} — confirm?
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>

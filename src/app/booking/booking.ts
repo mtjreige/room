@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BookingService, Booking } from '../booking-service';
-import { RoomService, Room } from '../room-service';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { Booking, BookingService } from '../booking-service';
+import { Room, RoomService } from '../room-service';
+
 
 @Component({
   selector: 'app-booking',
@@ -25,8 +26,8 @@ export class BookingComponent implements OnInit {
   roomName = '';
   bookingId?: number;
   isEditMode = false;
-  availableSlots: string[] = [];  // All possible slots (to show all in dropdown)
-  bookedSlots: string[] = [];     // Slots already booked (to disable in dropdown)
+  availableSlots: string[] = [];  
+  bookedSlots: string[] = [];     
 
   constructor(
     private fb: FormBuilder,
@@ -49,13 +50,13 @@ export class BookingComponent implements OnInit {
     if (!room) return;
 
     this.roomName = room.name;
-    this.availableSlots = room.allSlots || room.availableSlots;  // get all slots
+    this.availableSlots = room.allSlots || room.availableSlots;  
     this.bookedSlots = room.bookedSlots || [];
 
     if (this.isEditMode) {
       const booking = this.bookingService.getBooking(this.bookingId!);
       if (booking) {
-        // Add the booked slot of this booking back if missing so user can keep it selected
+        
         if (!this.availableSlots.includes(booking.time)) {
           this.availableSlots.push(booking.time);
         }
@@ -63,14 +64,14 @@ export class BookingComponent implements OnInit {
         this.bookingForm = this.fb.group({
           requester: [booking.requester, Validators.required],
           purpose: [booking.purpose, Validators.required],
-          slot: [booking.time, Validators.required]
+          time: [booking.time, Validators.required]
         });
       }
     } else {
       this.bookingForm = this.fb.group({
         requester: ['', Validators.required],
         purpose: ['', Validators.required],
-        slot: ['', Validators.required]
+        time: ['', Validators.required]
       });
     }
   }

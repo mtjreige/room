@@ -1,12 +1,12 @@
 .slot-dropdown {
-  background-color: white;
+  background-color: #f0f8ff;
   color: #0078D7;
   border-radius: 4px;
 }
 
 
 ::ng-deep .mat-select-panel {
-  background-color: #f0f8ff; 
+  background-color: white; 
   color: #0078D7;
 }
 
