@@ -1,12 +1,14 @@
 <div class="container mt-4">
   <h3>Booking Summary</h3>
 
-  <div *ngIf="hasNoBookings()" class="text-center my-5">
-    <i class="bi bi-calendar-x fs-1 text-muted"></i>
-    <p class="text-muted">No bookings yet!</p>
-  </div>
+<div *ngIf="hasNoBookings()" class="text-center my-5">
+  <img src="images/no-bookings-yet.png" alt="No bookings yet" style="max-width: 300px;" />
+  <p class="text-muted mt-3">No bookings yet!</p>
+</div>
 
-  <table mat-table [dataSource]="rooms" class="mat-elevation-z4 w-100" multiTemplateDataRows>
+
+<table *ngIf="!hasNoBookings()" mat-table [dataSource]="rooms" class="mat-elevation-z4 w-100" multiTemplateDataRows>
+
     
 
     <ng-container matColumnDef="expand">

@@ -16,17 +16,21 @@
         formControlName="time"
         class="custom-select"
       >
-        <mat-option
-          *ngFor="let slot of availableSlots"
-          [value]="slot"
-          [disabled]="bookedSlots.includes(slot) && (!isEditMode || bookingForm.value.slot !== slot)"
-        >
-          {{ slot }}
-        </mat-option>
+      <mat-option
+        *ngFor="let slot of availableSlots"
+        [value]="slot"
+        [disabled]="isSlotDisabled(slot)"
+      >
+        {{ slot }}
+      </mat-option>
+
       </mat-select>
  
 
-    <button type="submit" class="btn btn-primary save-button">Save Booking</button>
+      <button type="submit" class="btn btn-primary save-button" [disabled]="bookingForm.invalid">
+        Save Booking
+      </button>
+
   </form>
 
   <ng-template #confirmModal let-modal>

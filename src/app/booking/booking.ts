@@ -27,7 +27,8 @@ export class BookingComponent implements OnInit {
   bookingId?: number;
   isEditMode = false;
   availableSlots: string[] = [];  
-  bookedSlots: string[] = [];     
+  bookedSlots: string[] = []; 
+  originalTime?: string;    
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +57,7 @@ export class BookingComponent implements OnInit {
     if (this.isEditMode) {
       const booking = this.bookingService.getBooking(this.bookingId!);
       if (booking) {
-        
+        this.originalTime = booking.time;
         if (!this.availableSlots.includes(booking.time)) {
           this.availableSlots.push(booking.time);
         }
@@ -100,4 +101,11 @@ export class BookingComponent implements OnInit {
       }).catch(() => {});
     }
   }
+  isSlotDisabled(slot: string): boolean {
+  if (!this.bookedSlots.includes(slot)) return false;
+  if (this.isEditMode && this.originalTime === slot) return false;
+  return true;
+}
+
+  
 }
