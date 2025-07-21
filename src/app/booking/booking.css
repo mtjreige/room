@@ -1,17 +1,23 @@
-.slot-dropdown {
-  background-color: #f0f8ff;
+.custom-select {
+  background-color: #8BC1EC;
   color: #0078D7;
   border-radius: 4px;
 }
 
+::ng-deep .custom-select .mat-select-value {
+  color: #0078D7;
+}
 
-::ng-deep .mat-select-panel {
+::ng-deep .custpm-panel {
   background-color: white; 
   color: #0078D7;
 }
 
-
-::ng-deep .mat-option:hover {
+::ng-deep .custom-panel .mat-selected {
+  border-left: 4px solid #8BC1EC;
+  background-color: #f0f8ff; 
+}
+::ng-deep .custom-panel .mat-option:hover {
   background-color: #dbeeff;
 }
 
