@@ -62,7 +62,7 @@
     text-align: center;
 }
 
-.custom-tooltip {
+::ng-deep .custom-tooltip {
     background-color: #8BC1EC !important;
     color: #0078D7 !important;
     padding: 0.4rem 0.75 rem;
@@ -70,3 +70,22 @@
     font-size: 0.85rem;
     box-shadow: 0 0 6px rgba(0, 120, 215, 0.5);
 }
+
+.tooltip { 
+    --bs-tooltip-bg: #D3D3D3;
+    --bs-tooltip-color: #172543
+}
+
+/*.custom-tooltip {
+    .tooltip-inner {
+        background-color: .... ;
+     }
+ 
+    &.bs-tooltip-bottom>.tooltip-arrow::before {
+    border-bottom-color: .... !important;
+  }
+ 
+  &.bs-tooltip-top>.tooltip-arrow::before {
+    border-top-color: .... !important;
+  }
+}*/

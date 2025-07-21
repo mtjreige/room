@@ -25,7 +25,7 @@
                 'btn-secondary': room.bookedSlots?.includes(slot)
             }"
             [ngbTooltip]="room.bookedSlots?.includes(slot) ? 'Already booked!' : 'Click to book'"
-            ngbTooltipClass="custom-tooltip"
+            tooltipClass="custom-tooltip"
             (click)="bookSlot(slot)"
             >
             {{ slot }}
